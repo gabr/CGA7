@@ -53,7 +53,7 @@ void main() {
     }
     else if (Color == vec4(1.0)) // planet
     {
-        vec4 color =  diff; // no ambient for plantes
+        vec4 color =  ambient + diff; // no ambient for plantes
 
         if (mask.x > 0.0)
         {
@@ -61,7 +61,6 @@ void main() {
         }
 
         gl_FragColor = color;
-        gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);
     }
     else // rings
     {

@@ -12,6 +12,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include <string>
+#include <sstream>
 
 using namespace std;
 
@@ -50,8 +52,8 @@ const string earthMask_filePath = "./data/earth_reflect.jpg";
 const string moon_filePath = "./data/moon.jpg";
 const string saturn_filePath = "./data/saturn.jpg";
 
-const float planetSlices = 2;
-const float planetStacks = 6;
+const float planetSlices = 3;
+const float planetStacks = 4;
 
 // sun
 const double sunRadius = 25;
@@ -211,6 +213,20 @@ struct Vertex {
 	GLfloat position[4];
 	GLfloat normal[4];
 	GLfloat texcoord[2];
+
+    std::string toString()
+    {
+        stringstream ss;
+        ss << "[" << position[0] << "; " << position[1] << "; " << position[2] << "]";
+        return ss.str();
+    }
+
+    std::string toStringTex()
+    {
+        stringstream ss;
+        ss << "(" << texcoord[0] << ", " << texcoord[1] << ")";
+        return ss.str();
+    }
 };
 
 void bindVertexArrayObjects(GeometryData& geometry, const std::vector<Vertex> &vertexdata, const std::vector<unsigned short> &indices) 
@@ -298,19 +314,19 @@ void bindVertexArrayObjects(GeometryData& geometry, const std::vector<Vertex> &v
 
     // top
     n = p = glm::vec3(0, r, 0);
-    t = glm::vec2(0.5f, 1.0f);
+    t = glm::vec2(0.5f, 0.0f);
     vertexdata.push_back(Vertex(p, n, t));
 
     // middle
     for (int j = 1; j < planetSlices; j++)
     {
-        for (int i = planetStacks; i >= 0; i--)
+        for (int i = planetStacks; i > 0; i--)
         {
             x = sin(j*dPhi)*cos(i*dTheta);
             y = cos(j*dPhi);
             z = sin(j*dPhi)*sin(i*dTheta);
 
-            t = glm::vec2(((float)i) / planetStacks, ((float)j) / planetSlices);
+            t = glm::vec2(((float)(i-1)) / ((float)(planetStacks-1)), ((float)j) / planetSlices);
             n = p = glm::vec3(r*x, r*y, r*z);
             vertexdata.push_back(Vertex(p, n, t));
         }
@@ -318,7 +334,7 @@ void bindVertexArrayObjects(GeometryData& geometry, const std::vector<Vertex> &v
 
     // bottom
     n = p = glm::vec3(0, -r, 0);
-    t = glm::vec2(0.5f, 0.0f);
+    t = glm::vec2(0.5f, 1.0f);
     vertexdata.push_back(Vertex(p, n, t));
 
     // indices
@@ -333,8 +349,8 @@ void bindVertexArrayObjects(GeometryData& geometry, const std::vector<Vertex> &v
 
         // bottom
         indices.push_back(vCount);
-        indices.push_back(vCount - i - 1);
         indices.push_back(vCount - i);
+        indices.push_back(vCount - i - 1);
     }
     // the last one from top part
     indices.push_back(0);
@@ -347,7 +363,7 @@ void bindVertexArrayObjects(GeometryData& geometry, const std::vector<Vertex> &v
     
 
     // middle
-    for (int i = planetStacks + 1; i < vCount; i++)
+    for (int i = planetStacks + 1; i < vCount ; i++)
     {
         if (i % (int)planetStacks == 0)
         {
@@ -359,14 +375,26 @@ void bindVertexArrayObjects(GeometryData& geometry, const std::vector<Vertex> &v
             indices.push_back(i - planetStacks + 1);
             indices.push_back(i - 2 * planetStacks + 1);
         }
+        else
+        {
+            indices.push_back(i);
+            indices.push_back(i - planetStacks + 1);
+            indices.push_back(i - planetStacks);
 
-        indices.push_back(i);
-        indices.push_back(i - planetStacks + 1);
-        indices.push_back(i - planetStacks);
+            indices.push_back(i);
+            indices.push_back(i + 1);
+            indices.push_back(i - planetStacks + 1);
+        }
 
-        indices.push_back(i);
-        indices.push_back(i + 1);
-        indices.push_back(i - planetStacks + 1);
+    }
+
+    for (int i = 0; i < indices.size(); i += 3)
+    {
+        std::cout << i << ". ";
+        std::cout << vertexdata[indices[i]].toStringTex() << " ";
+        std::cout << vertexdata[indices[i+1]].toStringTex() << " ";
+        std::cout << vertexdata[indices[i+2]].toStringTex() << " ";
+        std::cout << std::endl;
     }
 
 	bindVertexArrayObjects(geometrySphere,vertexdata,indices);
@@ -644,7 +672,7 @@ void display()
     //    * glm::translate(glm::vec3(50.0f, 0.0f, 0.0f));
     TexturePhongShader.bindUniforms(M, V, P, lightSource, planetColor, earthTex, earthMaskTex, t);
     glBindVertexArray(geometrySphere.vao);
-    glDrawElements(GL_TRIANGLES, geometryCube.numIndices, GL_UNSIGNED_SHORT, (void*)0);
+    glDrawElements(GL_TRIANGLES, geometrySphere.numIndices, GL_UNSIGNED_SHORT, (void*)0);
     glBindVertexArray(0);
 
 
