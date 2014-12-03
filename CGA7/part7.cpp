@@ -631,36 +631,46 @@ void display()
 
   
 	// ***********************************************************************************
-	// Add rest of solar system  from previous assignments
+    // background
     M = glm::mat4(1.0f);
     TexturePhongShader.bindUniforms(M, V, P, lightSource, backgroundColor, backgroundTex, blackMaskTex, t);
     glBindVertexArray(geometryCube.vao);
     glDrawElements(GL_QUADS, geometryCube.numIndices, GL_UNSIGNED_SHORT, (void*)0);
     glBindVertexArray(0);
 
-    //// TODO: Use perviously created geometry
-	// use vertex array objects instead of immediate mode
+    // earth
     M = glm::rotate(earthDegree * t, glm::vec3(0.0f, 1.0f, 0.0f))
         * glm::translate(glm::vec3(50.0f, 0.0f, 0.0f))
-        * glm::scale(glm::vec3(earthRadius, earthRadius, earthRadius));
+        * glm::scale(glm::vec3(earthRadius));
     TexturePhongShader.bindUniforms(M, V, P, lightSource, planetColor, earthTex, earthMaskTex, t);
     glBindVertexArray(geometrySphere.vao);
     glDrawElements(GL_TRIANGLES, geometrySphere.numIndices, GL_UNSIGNED_SHORT, (void*)0);
     glBindVertexArray(0);
 
+    // moon
+    M = glm::rotate(earthDegree * t, glm::vec3(0.0f, 1.0f, 0.0f))
+        * glm::translate(glm::vec3(50.0f, 0.0f, 0.0f))
+        * glm::rotate(moonDegree * t, glm::vec3(0.0f, 0.0f, 1.0f))
+        * glm::translate(glm::vec3(20.0f, 0.0f, 0.0f))
+        * glm::scale(glm::vec3(moonRadius));
+    TexturePhongShader.bindUniforms(M, V, P, lightSource, planetColor, moonTex, blackMaskTex, t);
+    glBindVertexArray(geometrySphere.vao);
+    glDrawElements(GL_TRIANGLES, geometrySphere.numIndices, GL_UNSIGNED_SHORT, (void*)0);
+    glBindVertexArray(0);
 
-	// TODO: redraw the same sphere geometry, modify the planets size via its model matrix
+    // saturn
+    M = glm::rotate(saturnDegree * t, glm::vec3(0.0f, 1.0f, 0.0f))
+        * glm::translate(glm::vec3(100.0f, 0.0f, 0.0f))
+        * glm::scale(glm::vec3(saturnRadius));
+    TexturePhongShader.bindUniforms(M, V, P, lightSource, planetColor, saturnTex, blackMaskTex, t);
+    glBindVertexArray(geometrySphere.vao);
+    glDrawElements(GL_TRIANGLES, geometrySphere.numIndices, GL_UNSIGNED_SHORT, (void*)0);
+    glBindVertexArray(0);
 
 	// TODO: @saturn rings; redraw the same ring, modify the rings diameter via its model matrix
 
 	// ***********************************************************************************
 
-
-	//	glBindVertexArray(/*vao*/);
-	//	glDrawElements(/*PRIMITIVE TYPE*/, /*NUMBER OF ELEMENTS*/, /*FORMAT of INDICES*/, (void*)0);	
-	//  glBindVertexArray(0);
-
-	// ***********************************************************************************
 	// TODO: Add space shuttle
 	// Bonus: Compute elliptical orbit
 
