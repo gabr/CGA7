@@ -48,12 +48,11 @@ void main() {
 
     if (Color == vec4(0.0)) // background
     {
-        //gl_FragColor = ambient;
-        gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);
+        gl_FragColor = ambient;
     }
     else if (Color == vec4(1.0)) // planet
     {
-        vec4 color =  ambient + diff; // no ambient for plantes
+        vec4 color =  mask; // no ambient for plantes
 
         if (mask.x > 0.0)
         {

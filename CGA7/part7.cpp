@@ -37,7 +37,7 @@ glm::vec2 mouseStartPosition;
 float spaceLength = 400;
 
 float t = 0;  // the time parameter (incremented in the idle-function)
-float speed = 0.1;  // rotation speed of the light source in degree/frame
+float speed = 0.01;  // rotation speed of the light source in degree/frame
 
 // textures
 glm::vec4 planetColor(1.0);
@@ -52,8 +52,8 @@ const string earthMask_filePath = "./data/earth_reflect.jpg";
 const string moon_filePath = "./data/moon.jpg";
 const string saturn_filePath = "./data/saturn.jpg";
 
-const float planetSlices = 3;
-const float planetStacks = 4;
+const float planetSlices = 124;
+const float planetStacks = 124;
 
 // sun
 const double sunRadius = 25;
@@ -299,7 +299,7 @@ void bindVertexArrayObjects(GeometryData& geometry, const std::vector<Vertex> &v
 /// TODO
  void createSphere()
 {
-	float r=80;
+	float r=1;
 	
 	float dTheta = 2.0*PI/planetStacks;
 	float dPhi = PI/planetSlices;
@@ -320,13 +320,13 @@ void bindVertexArrayObjects(GeometryData& geometry, const std::vector<Vertex> &v
     // middle
     for (int j = 1; j < planetSlices; j++)
     {
-        for (int i = planetStacks; i > 0; i--)
+        for (int i = planetStacks; i >= 0; i--)
         {
             x = sin(j*dPhi)*cos(i*dTheta);
             y = cos(j*dPhi);
             z = sin(j*dPhi)*sin(i*dTheta);
 
-            t = glm::vec2(((float)(i-1)) / ((float)(planetStacks-1)), ((float)j) / planetSlices);
+            t = glm::vec2(((float)(i)) / ((float)(planetStacks)), ((float)j) / planetSlices);
             n = p = glm::vec3(r*x, r*y, r*z);
             vertexdata.push_back(Vertex(p, n, t));
         }
@@ -340,7 +340,7 @@ void bindVertexArrayObjects(GeometryData& geometry, const std::vector<Vertex> &v
     // indices
     // top and bottom
     int vCount = vertexdata.size() - 1;
-    for (int i = 1; i < planetStacks; i++)
+    for (int i = 1; i <= planetStacks; i++)
     {
         // top
         indices.push_back(0);
@@ -352,49 +352,21 @@ void bindVertexArrayObjects(GeometryData& geometry, const std::vector<Vertex> &v
         indices.push_back(vCount - i);
         indices.push_back(vCount - i - 1);
     }
-    // the last one from top part
-    indices.push_back(0);
-    indices.push_back(planetStacks);
-    indices.push_back(1);
-    // the last one from bottom part
-    indices.push_back(vCount);
-    indices.push_back(vCount - planetStacks);
-    indices.push_back(vCount - 1);
     
 
     // middle
-    for (int i = planetStacks + 1; i < vCount ; i++)
+    for (int i = planetStacks + 2; i < vCount ; i++)
     {
-        if (i % (int)planetStacks == 0)
-        {
-            indices.push_back(i);
-            indices.push_back(i - 2 * planetStacks + 1);
-            indices.push_back(i - planetStacks);
+        if (i % ((int)planetStacks + 1) == 0) // dont create triangles for additional vertexes
+            continue;
 
             indices.push_back(i);
-            indices.push_back(i - planetStacks + 1);
-            indices.push_back(i - 2 * planetStacks + 1);
-        }
-        else
-        {
-            indices.push_back(i);
-            indices.push_back(i - planetStacks + 1);
             indices.push_back(i - planetStacks);
+            indices.push_back(i - planetStacks - 1);
 
             indices.push_back(i);
             indices.push_back(i + 1);
-            indices.push_back(i - planetStacks + 1);
-        }
-
-    }
-
-    for (int i = 0; i < indices.size(); i += 3)
-    {
-        std::cout << i << ". ";
-        std::cout << vertexdata[indices[i]].toStringTex() << " ";
-        std::cout << vertexdata[indices[i+1]].toStringTex() << " ";
-        std::cout << vertexdata[indices[i+2]].toStringTex() << " ";
-        std::cout << std::endl;
+            indices.push_back(i - planetStacks );
     }
 
 	bindVertexArrayObjects(geometrySphere,vertexdata,indices);
@@ -652,7 +624,7 @@ void display()
     glUseProgram(SunShader.Shader);
     M = glm::mat4(1.0f) * glm::rotate(90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
     SunShader.bindUniforms(M, V, P, lightSource, sunColor, 0, 0, t);
-    //glutSolidSphere(sunRadius, sunSlices, sunStacks);
+    glutSolidSphere(sunRadius, sunSlices, sunStacks);
 	
 
     glUseProgram(TexturePhongShader.Shader);
@@ -668,8 +640,9 @@ void display()
 
     //// TODO: Use perviously created geometry
 	// use vertex array objects instead of immediate mode
-    //M = glm::rotate(earthDegree * t, glm::vec3(0.0f, 1.0f, 0.0f))
-    //    * glm::translate(glm::vec3(50.0f, 0.0f, 0.0f));
+    M = glm::rotate(earthDegree * t, glm::vec3(0.0f, 1.0f, 0.0f))
+        * glm::translate(glm::vec3(50.0f, 0.0f, 0.0f))
+        * glm::scale(glm::vec3(earthRadius, earthRadius, earthRadius));
     TexturePhongShader.bindUniforms(M, V, P, lightSource, planetColor, earthTex, earthMaskTex, t);
     glBindVertexArray(geometrySphere.vao);
     glDrawElements(GL_TRIANGLES, geometrySphere.numIndices, GL_UNSIGNED_SHORT, (void*)0);

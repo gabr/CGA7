@@ -87,7 +87,6 @@
     <None Include="data\shuttle.off" />
     <None Include="Light_and_Tex_FS.glsl" />
     <None Include="Light_and_Tex_VS.glsl" />
-    <None Include="Light_and_Tex_VS.glsl~" />
     <None Include="sun_FS.glsl" />
     <None Include="sun_VS.glsl" />
   </ItemGroup>
