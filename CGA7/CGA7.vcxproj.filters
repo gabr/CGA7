@@ -50,5 +50,8 @@
     <Image Include="data\saturn.jpg">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="data\earth_reflect.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

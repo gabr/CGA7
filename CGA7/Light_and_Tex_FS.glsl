@@ -52,7 +52,7 @@ void main() {
     }
     else if (Color == vec4(1.0)) // planet
     {
-        vec4 color =  mask; // no ambient for plantes
+        vec4 color =  diff; // no ambient for plantes
 
         if (mask.x > 0.0)
         {

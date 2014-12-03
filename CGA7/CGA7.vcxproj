@@ -96,6 +96,7 @@
   <ItemGroup>
     <Image Include="data\background.jpg" />
     <Image Include="data\earth.jpg" />
+    <Image Include="data\earth_reflect.jpg" />
     <Image Include="data\moon.jpg" />
     <Image Include="data\saturn.jpg" />
   </ItemGroup>
