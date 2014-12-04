@@ -624,10 +624,7 @@ void display()
     SunShader.bindUniforms(M, V, P, lightSource, sunColor, 0, 0, t);
     glutSolidSphere(sunRadius, sunSlices, sunStacks);
 	
-
     glUseProgram(TexturePhongShader.Shader);
-
-  
 	// ***********************************************************************************
     // background
     M = glm::mat4(1.0f);
@@ -670,15 +667,14 @@ void display()
         * glm::translate(glm::vec3(100.0f, 0.0f, 0.0f))
         * glm::scale(glm::vec3(saturnRadius + distanceFromSaturn));
 
+    glBindVertexArray(geometryRings.vao);
     for (int i = 0; i < numberOfRings; i++)
     {
         M = M * glm::scale(glm::vec3(1.0f + distanceBetweenRings));
         TexturePhongShader.bindUniforms(M, V, P, lightSource, ringsColor, 0, 0, t);
-        glBindVertexArray(geometryRings.vao);
         glDrawElements(GL_LINE_LOOP, geometryRings.numIndices, GL_UNSIGNED_SHORT, (void*)0);
-        glBindVertexArray(0);
     }
-
+    glBindVertexArray(0);
 	// ***********************************************************************************
 
 	// TODO: Add space shuttle
