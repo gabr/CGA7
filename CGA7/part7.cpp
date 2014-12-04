@@ -79,7 +79,7 @@ const float saturnDegree = 1.0;
 glm::vec4 saturnColor = planetColor;
 // rings
 const double distanceFromSaturn = 7.0;
-const double distanceBetweenRings = 0.4;
+const double distanceBetweenRings = 0.02;
 const double numberOfRings = 10;
 const double numberOfCircleSegments = 60;
 glm::vec4 ringsColor(0.8, 0.6, 0.5, 0.0);
@@ -274,14 +274,12 @@ void bindVertexArrayObjects(GeometryData& geometry, const std::vector<Vertex> &v
 { 
 	glm::vec2 t;
     glm::vec3 n(0,1,0);    
-    glm::vec3 p ;
+    glm::vec3 p;
 	
 	unsigned short index = 0;
 	std::vector<Vertex> vertexdata ;
 	std::vector<unsigned short> indices;
 	
-
-	 
 	float r= 1;
 	for (int i=0;i<100;i++)
 	{
@@ -667,7 +665,19 @@ void display()
     glDrawElements(GL_TRIANGLES, geometrySphere.numIndices, GL_UNSIGNED_SHORT, (void*)0);
     glBindVertexArray(0);
 
-	// TODO: @saturn rings; redraw the same ring, modify the rings diameter via its model matrix
+    // rings
+    M = glm::rotate(saturnDegree * t, glm::vec3(0.0f, 1.0f, 0.0f))
+        * glm::translate(glm::vec3(100.0f, 0.0f, 0.0f))
+        * glm::scale(glm::vec3(saturnRadius + distanceFromSaturn));
+
+    for (int i = 0; i < numberOfRings; i++)
+    {
+        M = M * glm::scale(glm::vec3(1.0f + distanceBetweenRings));
+        TexturePhongShader.bindUniforms(M, V, P, lightSource, ringsColor, 0, 0, t);
+        glBindVertexArray(geometryRings.vao);
+        glDrawElements(GL_LINE_LOOP, geometryRings.numIndices, GL_UNSIGNED_SHORT, (void*)0);
+        glBindVertexArray(0);
+    }
 
 	// ***********************************************************************************
 
