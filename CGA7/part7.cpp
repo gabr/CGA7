@@ -12,9 +12,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include <string>
-#include <sstream>
-
 using namespace std;
 
 // global consts
@@ -213,20 +210,6 @@ struct Vertex {
 	GLfloat position[4];
 	GLfloat normal[4];
 	GLfloat texcoord[2];
-
-    std::string toString()
-    {
-        stringstream ss;
-        ss << "[" << position[0] << "; " << position[1] << "; " << position[2] << "]";
-        return ss.str();
-    }
-
-    std::string toStringTex()
-    {
-        stringstream ss;
-        ss << "(" << texcoord[0] << ", " << texcoord[1] << ")";
-        return ss.str();
-    }
 };
 
 void bindVertexArrayObjects(GeometryData& geometry, const std::vector<Vertex> &vertexdata, const std::vector<unsigned short> &indices) 
