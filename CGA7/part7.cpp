@@ -490,15 +490,15 @@ void bindVertexArrayObjects(GeometryData& geometry, const std::vector<Vertex> &v
 	geometryShuttle.numIndices = objA->noOfFaces*3;
 
 	// TODO: Fill vertexdata
-	for (int i=0; i< geometryShuttle.numVertices; i++) 
-	{	 
-		 		  
-	}
+    for (int i = 0; i < geometryShuttle.numVertices; i++)
+        vertexdata.push_back(Vertex(objA->vertexList[i], objA->normalsList[i]));
 
 	// TODO: Fill indexData
 	for (int i=0; i< objA->noOfFaces; i++) 
 	{ 
-	
+        indices.push_back(objA->faceList[i].A);
+        indices.push_back(objA->faceList[i].B);
+        indices.push_back(objA->faceList[i].C);
 	}
 
 	bindVertexArrayObjects(geometryShuttle,vertexdata,indices);
@@ -649,6 +649,14 @@ void display()
 	// ***********************************************************************************
 
 	// TODO: Add space shuttle
+    M = glm::rotate(saturnDegree * -t, glm::vec3(0.0f, 0.0f, 1.0f))
+        * glm::translate(glm::vec3(100.0f, 0.0f, 0.0f))
+        * glm::rotate(90.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+    TexturePhongShader.bindUniforms(M, V, P, lightSource, glm::vec4(0.7, 0.7, 0.7, 1.0), 0, blackMaskTex, t);
+    glBindVertexArray(geometryShuttle.vao);
+    glDrawElements(GL_TRIANGLES, geometryShuttle.numIndices, GL_UNSIGNED_SHORT, (void*)0);
+    glBindVertexArray(0);
+
 	// Bonus: Compute elliptical orbit
 
 	// ***********************************************************************************

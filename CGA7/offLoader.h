@@ -72,6 +72,7 @@ OffObject::OffObject(string filename) {
     for (int i=0; i<noOfFaces; i++) 
 	{
         // TODO
+        inFile >> tmp;
         inFile >> T.A;
         inFile >> T.B;
         inFile >> T.C;
