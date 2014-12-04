@@ -612,12 +612,6 @@ void display()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
-	// create Matrices
-	//M = glm::rotate(50.0f,0.0f,1.0f,0.0f);  
-
-	glm::vec4 Color (0.9,0.9,0, 1); // set the color to yellow
-
 	// bind Shader & bind Uniforms
     glUseProgram(SunShader.Shader);
     M = glm::mat4(1.0f) * glm::rotate(90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
