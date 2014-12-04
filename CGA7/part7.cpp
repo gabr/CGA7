@@ -653,6 +653,8 @@ void display()
 
 	// TODO: Add space shuttle
     M = glm::rotate(saturnDegree * -t, glm::vec3(0.0f, 0.0f, 1.0f))
+        * glm::rotate(180.0f, glm::vec3(0.0f, 1.0f, 0.0f))
+        * glm::rotate(180.0f, glm::vec3(1.0f, 0.0f, 0.0f))
         * glm::translate(glm::vec3(100.0f, 0.0f, 0.0f))
         * glm::rotate(90.0f, glm::vec3(0.0f, 0.0f, 1.0f));
     TexturePhongShader.bindUniforms(M, V, P, lightSource, shuttleColor, 0, blackMaskTex, t);
