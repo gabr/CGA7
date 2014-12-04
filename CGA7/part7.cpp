@@ -81,6 +81,9 @@ const double numberOfRings = 10;
 const double numberOfCircleSegments = 60;
 glm::vec4 ringsColor(0.8, 0.6, 0.5, 0.0);
 
+// shuttle
+glm::vec4 shuttleColor(0.7, 0.7, 0.7, 1.0);
+
 //We need to keep track of matrices ourselves
 /**
 * @brief P,V,M:
@@ -652,7 +655,7 @@ void display()
     M = glm::rotate(saturnDegree * -t, glm::vec3(0.0f, 0.0f, 1.0f))
         * glm::translate(glm::vec3(100.0f, 0.0f, 0.0f))
         * glm::rotate(90.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-    TexturePhongShader.bindUniforms(M, V, P, lightSource, glm::vec4(0.7, 0.7, 0.7, 1.0), 0, blackMaskTex, t);
+    TexturePhongShader.bindUniforms(M, V, P, lightSource, shuttleColor, 0, blackMaskTex, t);
     glBindVertexArray(geometryShuttle.vao);
     glDrawElements(GL_TRIANGLES, geometryShuttle.numIndices, GL_UNSIGNED_SHORT, (void*)0);
     glBindVertexArray(0);

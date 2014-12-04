@@ -61,6 +61,10 @@ void main() {
 
         gl_FragColor = color;
     }
+    else if (Color == vec4(0.7, 0.7, 0.7, 1.0))
+    {
+        gl_FragColor = 0.2 * Color + Color * dotPr;
+    }
     else // rings
     {
         gl_FragColor = Color;

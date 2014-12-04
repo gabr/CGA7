@@ -84,14 +84,14 @@ OffObject::OffObject(string filename) {
         
         for (int i = 0; i < 3; i++)
         {
-            vertexCurrent = vertexList[i];
-            vertexNext = vertexList[i % 3];
+            vertexCurrent = vertexList[indices[i]];
+            vertexNext = vertexList[indices[i] % 3];
 
-            normalsList[i].x = normalsList[i].x
+            normalsList[indices[i]].x = normalsList[indices[i]].x
                 + ((vertexCurrent.y - vertexNext.y) * (vertexCurrent.z + vertexNext.z));
-            normalsList[i].y = normalsList[i].y
+            normalsList[indices[i]].y = normalsList[indices[i]].y
                 + ((vertexCurrent.z - vertexNext.z) * (vertexCurrent.x + vertexNext.x));
-            normalsList[i].z = normalsList[i].z
+            normalsList[indices[i]].z = normalsList[indices[i]].z
                 + ((vertexCurrent.x - vertexNext.x) * (vertexCurrent.y + vertexNext.y));
         }
     }
