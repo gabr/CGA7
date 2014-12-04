@@ -20,7 +20,6 @@ class OffObject
 {
 
 public: 
-	
   	vector<glm::vec3> vertexList;
 	vector<glm::vec3> normalsList;
 	vector<tri> faceList;
@@ -29,7 +28,6 @@ public:
 	int noOfVertices;
 	
 	OffObject(string filename);
-	
 };
 
 
@@ -54,20 +52,47 @@ OffObject::OffObject(string filename) {
     for (int i=0; i<noOfVertices; i++) 
 	{
 		glm::vec3 vertex;
-        // TODO
+
+        inFile >> vertex.x;
+        inFile >> vertex.y;
+        inFile >> vertex.z;
 
         // initalize the normal with (0,0,0)
-		
 		// add vertex and normal
+        vertexList.push_back(vertex);
+        normalsList.push_back(glm::vec3(0.0f));
     }
 
 
 	// Read Triangle Data:
-	tri T;
+    tri T;
+    glm::vec3 vertexCurrent;
+    glm::vec3 vertexNext;
+
     for (int i=0; i<noOfFaces; i++) 
 	{
         // TODO
+        inFile >> T.A;
+        inFile >> T.B;
+        inFile >> T.C;
+
+        faceList.push_back(T);
         // probably helpful: glm::cross(..,..);	//CHECK DOCUMENTATION!!!
+
+        int indices[] = { T.A, T.B, T.C };
+        
+        for (int i = 0; i < 3; i++)
+        {
+            vertexCurrent = vertexList[i];
+            vertexNext = vertexList[i % 3];
+
+            normalsList[i].x = normalsList[i].x
+                + ((vertexCurrent.y - vertexNext.y) * (vertexCurrent.z + vertexNext.z));
+            normalsList[i].y = normalsList[i].y
+                + ((vertexCurrent.z - vertexNext.z) * (vertexCurrent.x + vertexNext.x));
+            normalsList[i].z = normalsList[i].z
+                + ((vertexCurrent.x - vertexNext.x) * (vertexCurrent.y + vertexNext.y));
+        }
     }
     
     //normalize:
@@ -75,6 +100,7 @@ OffObject::OffObject(string filename) {
 	{
         // TODO
         // probably helpful: glm::normalize(..);	//CHECK DOCUMENTATION!!!
+        normalsList[i] = glm::normalize(normalsList[i]);
     }      
 
 

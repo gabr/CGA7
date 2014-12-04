@@ -481,33 +481,27 @@ void bindVertexArrayObjects(GeometryData& geometry, const std::vector<Vertex> &v
 /// loads shuttle data from off-file and fills according GeometryData
  void createShuttle()
 {
-    objA = new OffObject("../data/shuttle.off");
-   
-   
+    objA = new OffObject("./data/shuttle.off");
+
     std::vector<Vertex> vertexdata ;        // store the vertices of the shuttle here
     std::vector<unsigned short> indices;    // store the according indices here
-
 
 	geometryShuttle.numVertices = objA->noOfVertices;
 	geometryShuttle.numIndices = objA->noOfFaces*3;
 
-
 	// TODO: Fill vertexdata
-	
 	for (int i=0; i< geometryShuttle.numVertices; i++) 
 	{	 
 		 		  
 	}
 
 	// TODO: Fill indexData
-
 	for (int i=0; i< objA->noOfFaces; i++) 
 	{ 
 	
 	}
 
 	bindVertexArrayObjects(geometryShuttle,vertexdata,indices);
-
 }
 
 void initTexture(GLint name, GLint w, GLint h, GLubyte *data) {
