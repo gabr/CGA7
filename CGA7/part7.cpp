@@ -607,14 +607,15 @@ void display()
     glDrawElements(GL_QUADS, geometryCube.numIndices, GL_UNSIGNED_SHORT, (void*)0);
     glBindVertexArray(0);
 
+    // sphere
+    glBindVertexArray(geometrySphere.vao);
+
     // earth
     M = glm::rotate(earthDegree * t, glm::vec3(0.0f, 1.0f, 0.0f))
         * glm::translate(glm::vec3(50.0f, 0.0f, 0.0f))
         * glm::scale(glm::vec3(earthRadius));
     TexturePhongShader.bindUniforms(M, V, P, lightSource, planetColor, earthTex, earthMaskTex, t);
-    glBindVertexArray(geometrySphere.vao);
     glDrawElements(GL_TRIANGLES, geometrySphere.numIndices, GL_UNSIGNED_SHORT, (void*)0);
-    glBindVertexArray(0);
 
     // moon
     M = glm::rotate(earthDegree * t, glm::vec3(0.0f, 1.0f, 0.0f))
@@ -623,17 +624,16 @@ void display()
         * glm::translate(glm::vec3(20.0f, 0.0f, 0.0f))
         * glm::scale(glm::vec3(moonRadius));
     TexturePhongShader.bindUniforms(M, V, P, lightSource, planetColor, moonTex, blackMaskTex, t);
-    glBindVertexArray(geometrySphere.vao);
     glDrawElements(GL_TRIANGLES, geometrySphere.numIndices, GL_UNSIGNED_SHORT, (void*)0);
-    glBindVertexArray(0);
 
     // saturn
     M = glm::rotate(saturnDegree * t, glm::vec3(0.0f, 1.0f, 0.0f))
         * glm::translate(glm::vec3(100.0f, 0.0f, 0.0f))
         * glm::scale(glm::vec3(saturnRadius));
     TexturePhongShader.bindUniforms(M, V, P, lightSource, planetColor, saturnTex, blackMaskTex, t);
-    glBindVertexArray(geometrySphere.vao);
     glDrawElements(GL_TRIANGLES, geometrySphere.numIndices, GL_UNSIGNED_SHORT, (void*)0);
+
+    // unbind sphere
     glBindVertexArray(0);
 
     // rings
